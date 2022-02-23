@@ -1,0 +1,44 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    </head>
+
+    <body>
+        <div class="one">
+            <h1>Language Detection and Recognition</h1>
+        </div>
+        <!-- Upload form. -->
+        <div>
+        <form action="{% url "my-view" %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form}}
+            <p>{{ message }}</p>    
+            <!-- <p>{{ form.non_field_errors }}</p>
+
+            <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p> -->
+            
+            <!-- <p>
+                {{ form.docfile.errors }}
+                {{ form.docfile }}
+            </p> -->
+            
+            <button type="submit">Upload</button>
+            <!-- <p><input type="submit" value="Upload"/></p> -->
+        </form>
+        <!-- <p> {{ file}}</p>
+        <p> {{ content}}</p> -->
+        </div>
+
+        <div class="output">
+            <center><p>{{file}}</p></center>
+            <p id="content">{{content}}</p>
+            
+            <center><img src='{{ MEDIA_URL }}{{ content }}' id="img_content"></center>
+
+        </div>
+    </body>
+</html>
