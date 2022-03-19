@@ -5,10 +5,14 @@ from .forms import DocumentForm
 import docx2txt
 import docx
 
-from langdetect import detect, detect_langs
+from langdetect import detect, detect_langs, DetectorFactory
 import pytesseract
 import cv2
 
+from deep_translator import GoogleTranslator
+from googletrans import Translator
+
+DetectorFactory.seed = 0
 
 def my_view(request):
     
@@ -37,24 +41,44 @@ def my_view(request):
     print(type(latest_file), latest_file)
     
     if latest_file.endswith('.jpg'):
-        
+        translator = Translator()
+        text = ''
         data = obj.docfile
         pytesseract.pytesseract.tesseract_cmd=r'C:\Program Files\Tesseract-OCR\tesseract.exe'
         img = cv2.imread(latest_file)
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-        
-        custom_config = r'-l hin+eng+es --psm 6'
+        #custom_config = r'-l eng+jpn --psm 6'
+        custom_config = r'-l afr+amh+ara+asm+aze+bel+ben+bod+bos+bre+bul+cat+ceb+ces+chi_sim+chi_tra+chr+cos+cym+dan+dan_frak+dzo+ell+eng+enm+epo+equ+est+eus+fao+fas+fil+fin+fra+frk+frm+fry+gla+gke+glg+grc+guj+hat+heb+hin+hrv+hun+hye+iku+ind+isl+ita+ita+old+jav+jpn+kan+kat+kaz+khm+kir+kmr+kor+kur+lao+lat+lav+lit+itz+mal+mar+mkd+mlt+mon+mri+msa+mya+nep+nld+nor+oci+ori+osd+pan+pol+por+pus+que+ron+rus+san+sin+slk+slv+snd+spa+sqi+srp+sun+swa+swe+syr+tam+tat+tel+tgk+tgl+tha+tir+ton+tur+uig+ukr+urd+uzb+vie+yid+yor --psm 6'
         txt = pytesseract.image_to_string(thresh, config=custom_config)
-        # cv2.imshow('image',thresh)
-        # cv2.waitKey(0)
+        txt = str(txt).splitlines()
+        
+        translated = []
+        for to_translate in txt:
+            if to_translate != '':
+                translated.append(translator.translate(to_translate, dest='en'))
+            else:
+                pass
+        
+        print(translated)        
         print(txt)
+        
+        
         try:
-            print(detect_langs(txt))
+            for i in txt:
+                if i != '':
+                    print(detect_langs(i))
+                else:
+                    pass
+            # print(detect_langs(txt))
+            # txt =txt.splitlines()
         except Exception as e:
             print(e)
+        # cv2.imshow('image',thresh)
+        # cv2.waitKey(0)
         
-        
+        # for i in txt:
+        #     text += i
     else:
         
         doc = docx.Document(latest_file)
@@ -65,7 +89,18 @@ def my_view(request):
             fullText.append(para.text)
         data = '\n'.join(fullText)
 
-        print(detect(data))
+        data_split = []
+        data_split = data.split('.')
+        print(data_split)
+        
+        try:
+            for i in data_split:
+                print(detect_langs(i))
+        except Exception as e:
+            print(e)
+        # for i in data_split:
+        #     print(detect(i))
+        #print(detect_langs(data))
     # with open(latest_file,'rb') as f:
     #     context = f.read().decode(encoding="utf-8")
     #     f.close()
@@ -84,5 +119,8 @@ def my_view(request):
     #     with open(os.path.join(os.getcwd(), filename), 'r') as f:
     #         text = f.read()
     # Render list page with the documents and the form
-    context = {'documents': documents, 'form': form, 'message': message, 'file': latest_file, 'content': data}
+    if txt:
+        context = {'documents': documents, 'form': form, 'message': message, 'file': latest_file.replace('documents/',''), 'content': data, 'text_detected': txt, 'text_translated': translated}
+    else:
+        context = {'documents': documents, 'form': form, 'message': message, 'file': latest_file.replace('documents/',''), 'content': data}
     return render(request, 'base.html', context)
