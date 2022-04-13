@@ -39,6 +39,7 @@
                 {% csrf_token %}
                 {{form}}
                 <p>{{ message }}</p>    
+
                 <!-- <p>{{ form.non_field_errors }}</p>
                 <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p> -->
                 <!-- <p>
@@ -54,9 +55,128 @@
 
         <!-- SCROLL DOWN -->
         <div ><!--<a href="#output">--><i class='bx bx-chevron-down bx-flashing icon' style='color:#fffefe' onclick="anchor()" ></i><!--</a>--></div>
+        <div class='empty-space' id="output"></div>
+        <!-- RESULT -->
+        <div class="result-container " style="padding-top: 1em;">
+            <section class="result-section">
+                <!-- <div class="card" style="width: 18rem;">
+                    <img class="card-img-top" src="{{ MEDIA_URL }}{{ content }}" alt="Card image cap" >
+                    <div class="card-body">
+                        <p class="card-text" style="color: black !important;">           
+                            {% for i in text_detected %}
+                                {{i}} 
+                                <br>
+                            {% endfor %}
+                            <hr>
+                            <h6>Languages Recognized:</h6>
+                        </p>
+                    </div>
+                </div> -->
+                <!-- {% if text_detected %} -->
+                <div class="card result-card" >
+                    <!-- <div class="card-block">
+                        <h4 class="card-title card-styling">Your File:</h4>
+                        <h6 class="card-subtitle text-muted card-styling">{{file}}</h6>
+                    </div>
+                    <img src="{{ MEDIA_URL }}{{ content }}" id='img_content' alt="Card image">
+                    <hr> -->
+                    <div class="card-block" >
+                        <h4 class="card-title card-head" >Text Recognized:</h4>
+                        <p class="card-text card-content" >
+                            <!-- {% for i, j in zipped %}
+                                <button type="button" class="btn btn-{{j}}">{{i}}</button>
+                            {% endfor %} -->
+
+                            {% for i in text_detected %}
+                                {{i}}
+                                <!-- <br>  -->     
+                            {% endfor %}               
+                        </p>
+                        <h4 class="card-title card-head">Languages:</h4>
+                        <p class="card-text card-head" style="padding-bottom: 1em;">
+                            {% for i in Language_detected %}
+                                <button type="button" class="btn btn-primary card-content" >{{i}} </button>
+                                <!-- <br> -->
+                            {% endfor %}
+                        </p>
+                        <!-- <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a> -->
+                    </div>
+                </div>
+                <!-- {% endif %} -->
+             
+                <!-- Example single danger button -->
+                <!-- <div class="btn-group ">
+                    <button type="button" class="btn dropdown-toggle dropdown-button2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Translate text to
+                    </button>
+                    <div class="dropdown-menu scrollable-menu">
+                    <a class="dropdown-item" href="#">English</a>
+                    <a class="dropdown-item" href="#">Marathi</a>
+                    <a class="dropdown-item" href="#">Hindi</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Separated link</a>
+                    </div>
+                </div> -->
+     
+                <div class="card result-card" >
+                    <!-- <div class="card-block">
+                        <h4 class="card-title card-styling">Your File:</h4>
+                        <h6 class="card-subtitle text-muted card-styling">{{file}}</h6>
+                    </div>
+                    <img src="{{ MEDIA_URL }}{{ content }}" id='img_content' alt="Card image">
+                    <hr> -->
+                    <div class="card-block" >
+                        <h4 class="card-title card-head" style="padding-top: 1em;">Text Translation:</h4>
+                        <p class="card-text card-content" style="padding-bottom:8em;">
+                            <!-- {% for i, j in zipped %}
+                                <button type="button" class="btn btn-{{j}}">{{i}}</button>
+                            {% endfor %} -->
+
+                            {% for i in text_translated %}
+                                {{i.text}}
+                                <!-- <br>  -->     
+                            {% endfor %}               
+                        </p>
+                        <!-- <h4 class="card-title card-styling">Languages:</h4>
+                        <p class="card-text card-styling" style="padding-bottom: 1em;">
+                            {% for i in Language_detected %}
+                                <button type="button" class="btn btn-primary card-styling" >{{i}} </button>
+                            
+                            {% endfor %}
+                        </p> -->
+                        <!-- <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a> -->
+                    </div>
+                </div>
+                <!-- <div class="card" style="width: 18rem;">
+                    <img class="card-img-top" src="{{ MEDIA_URL }}{{ content }}" alt="Card image cap" >
+                    <div class="card-body">
+                        <p class="card-text" style="color: black !important;">
+                            {% for i in text_translated %}
+                                {{i.text}} 
+                                <br>
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div> -->
+            </section>
+        </div>
+
+
+
+
+
+
 
         <!-- INFORMATION -->
-        <div class="output" id="output">
+        <div class="information-container" >
             <!-- <center><p>{{file}}</p></center> -->
             <!-- <p id="content">{{content}}</p> -->
             <!-- <center><img src='{{ MEDIA_URL }}{{ content }}' id="img_content"></center> -->
@@ -89,100 +209,53 @@
                     
                 </div>  
             </section>
-            <!-- INFORMATION ENDS -->
-
-            
-            <!-- RESULT -->
-            <section class="cards">
-                <!-- <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="{{ MEDIA_URL }}{{ content }}" alt="Card image cap" >
-                    <div class="card-body">
-                        <p class="card-text" style="color: black !important;">           
-                            {% for i in text_detected %}
-                                {{i}} 
-                                <br>
-                            {% endfor %}
-                            <hr>
-                            <h6>Languages Recognized:</h6>
-                        </p>
+            <section class="cards" style="padding-top: 30px;">
+                <div class="information">
+                    <div style="padding-top: 50px; border-bottom: solid white 4px;">
+                        <h3>100 % Free</h3>
+                        <p class="information-content">Our system offers unlimited uploads, no email or registration is needed, and on top of that it is 100% free!</p>
                     </div>
-                </div> -->
-                <!-- {% if text_detected %} -->
-                    <div class="card result-card" >
-                        <!-- <div class="card-block">
-                            <h4 class="card-title card-styling">Your File:</h4>
-                            <h6 class="card-subtitle text-muted card-styling">{{file}}</h6>
-                        </div>
-                        <img src="{{ MEDIA_URL }}{{ content }}" id='img_content' alt="Card image">
-                        <hr> -->
-                        <div class="card-block" >
-                            <h4 class="card-title card-styling" style="padding-top: 1em;">Text Recognized:</h4>
-                            <p class="card-text card-styling">
-                                <!-- {% for i, j in zipped %}
-                                    <button type="button" class="btn btn-{{j}}">{{i}}</button>
-                                {% endfor %} -->
-
-                                {% for i in text_detected %}
-                                    {{i}}
-                                    <!-- <br>  -->     
-                                {% endfor %}               
-                            </p>
-                            <h4 class="card-title card-styling">Languages:</h4>
-                            <p class="card-text card-styling" style="padding-bottom: 1em;">
-                                {% for i in Language_detected %}
-                                    <button type="button" class="btn btn-primary card-styling" >{{i}} </button>
-                                    <!-- <br> -->
-                                {% endfor %}
-                            </p>
-                            <!-- <a href="#" class="card-link">Card link</a>
-                            <a href="#" class="card-link">Another link</a> -->
-                        </div>
+                    <div style="padding-top: 50px; border-bottom: solid white 4px;">
+                        <h3>50+ Recognition Languages</h3>
+                        <p class="information-content">Our system offers around 50+ languages which can be detected.</p>
                     </div>
-                <!-- {% endif %} -->
-                <div class="card result-card" >
-                    <!-- <div class="card-block">
-                        <h4 class="card-title card-styling">Your File:</h4>
-                        <h6 class="card-subtitle text-muted card-styling">{{file}}</h6>
-                    </div>
-                    <img src="{{ MEDIA_URL }}{{ content }}" id='img_content' alt="Card image">
-                    <hr> -->
-                    <div class="card-block" >
-                        <h4 class="card-title card-styling" style="padding-top: 1em;">Text Translation:</h4>
-                        <p class="card-text card-styling">
-                            <!-- {% for i, j in zipped %}
-                                <button type="button" class="btn btn-{{j}}">{{i}}</button>
-                            {% endfor %} -->
-
-                            {% for i in text_translated %}
-                                {{i.text}}
-                                <!-- <br>  -->     
-                            {% endfor %}               
-                        </p>
-                        <!-- <h4 class="card-title card-styling">Languages:</h4>
-                        <p class="card-text card-styling" style="padding-bottom: 1em;">
-                            {% for i in Language_detected %}
-                                <button type="button" class="btn btn-primary card-styling" >{{i}} </button>
-                               
-                            {% endfor %}
-                        </p> -->
-                        <!-- <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a> -->
-                    </div>
-                </div>
-                <!-- <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="{{ MEDIA_URL }}{{ content }}" alt="Card image cap" >
-                    <div class="card-body">
-                        <p class="card-text" style="color: black !important;">
-                            {% for i in text_translated %}
-                                {{i.text}} 
-                                <br>
-                            {% endfor %}
-                        </p>
-                    </div>
-                </div> -->
+ 
+                </div>  
             </section>
+            <section class="cards" style="padding-top: 30px;">
+                <div class="information">
+                    <div style="padding-top: 50px; border-bottom: solid white 4px;">
+                        <h3>Major Formats</h3>
+                        <p class="information-content">We provide for major input formats: .doc, .txt, .png, .jpg</p>
+                    </div>
+                    <div style="padding-top: 50px; border-bottom: solid white 4px;">
+                        <h3>Multilingual language Analysis</h3>
+                        <p class="information-content">We analyse document and extract text which might have text written in more than one language.</p>
+                    </div>
+ 
+                </div>  
+            </section>
+            <section class="cards" style="padding-top: 30px;">
+                <div class="information">
+                    <div style="padding-top: 50px; border-bottom: solid white 4px;">
+                        <h3>Side-by-Side Views</h3>
+                        <p class="information-content">We display languages recognized and the translated model of it side-by-side to compare any miss-recognized data.</p>
+                    </div>
+                    <div style="padding-top: 50px; border-bottom: solid white 4px;">
+                        <h3>Respect User Privacy</h3>
+                        <p class="information-content">We respects your privacy and does not share your input or output data generated with third party. All input images,text file and generated text are automatically deleted within the instance of completion of our model.</p>
+                    </div>
+ 
+                </div>  
+            </section>
+            <!-- INFORMATION ENDS -->
         </div>
 
+        <h3 style="position: absolute; top:390%; color:white; padding-left:1em;">Get Insights of our Research:</h3>
+        <iframe src="https://drive.google.com/embeddedfolderview?id=1tPzDhJhrSa1ushJe3XQ2RayOsA2o7nnI#grid" style="position: absolute; top: 400%; width:100%; height:600px; border:0;"></iframe>
+        
+        <!-- https://drive.google.com/drive/folders/1tPzDhJhrSa1ushJe3XQ2RayOsA2o7nnI/preview?usp=drivesdk -->
+        <!-- https://drive.google.com/embeddedfolderview?id=1tPzDhJhrSa1ushJe3XQ2RayOsA2o7nnI#grid -->
         <!-- SCROLL FUNCTION -->
         <script type="text/javascript">
             function anchor(){
